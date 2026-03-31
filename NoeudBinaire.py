@@ -1,6 +1,8 @@
 class NoeudBinaire:
-    """Classe qui implémente un noeud dans un arbre binaire"""
-
+    """
+    Cette classe implémente un noeud appartenant à un arbre binaire.
+    """
+    
     #Constructeur
     def __init__(self, valeur, gauche_ = None, droite_ = None):
         self.courant = valeur
@@ -18,40 +20,40 @@ class NoeudBinaire:
         return self.droite
     
     #Setters
-    def setValeur(self, valeur):
-        self.courant = valeur
-
+    def setValeur(self, valeur_):
+        self.courant = valeur_
+        
     def setGauche(self, gauche_):
         self.gauche = gauche_
-
+        
     def setDroite(self, droite_):
         self.droite = droite_
-
+        
     #Méthodes
         #Sous-arbre gauche
-    def aArbreGauche(self):
-        if self.gauche != None:
+    def aGauche(self):
+        if self.gauche is not None:
             return 1
         else:
             return 0
-            
+        
         #Sous-arbre droit
-    def aArbreDroit(self):
-        if self.droite != None:
+    def aDroite(self):
+        if self.droite is not None:
             return 1
         else:
             return 0
         
         #Est une feuille
     def estFeuille(self):
-        if self.aArbreGauche() == 0 and self.aArbreDroit() == 0 and self.courant != None:
+        if not self.aGauche() and not self.aDroite() and self.courant is not None:
             return 1
         else:
             return 0
         
         #Est un arbre vide
     def estVide(self):
-        if self.aArbreGauche() == 0 and self.aArbreDroit() == 0 and self.courant == None:
+        if not self.aGauche() and not self.aDroite() and self.courant is None:
             return 1
         else:
             return 0
@@ -106,7 +108,6 @@ class NoeudBinaire:
 
         #Parcours préfixe
     def parcoursPrefixe(self, liste=[]):
-        
         
         #Parcours suffixe
         
