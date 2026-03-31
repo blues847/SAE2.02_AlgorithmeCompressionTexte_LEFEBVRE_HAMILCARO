@@ -50,22 +50,37 @@ class NoeudBinaire:
         res.append(self.valeur)
         return res
     
-    def __str__(self, niveau=0):
-        ret=""
-        if self.a_droit():
-            ret += self.droit.__str__(niveau + 1)
-        ret += "\t" * niveau + repr(self.valeur) + "\n"
-        if self.a_gauche():
-            ret += self.gauche.__str__(niveau + 1)
-        return ret
+    def __str__(self, prefix="", is_root=True):
+        res = ""
+        if self.droit:
+            res += self.droit.__str__(prefix + "    ", False)
+        if is_root:
+            res += repr(self.valeur) + "\n"
+        else:
+            res += prefix[:-4] + "|-- " + repr(self.valeur) + "\n"
+        if self.gauche:
+            res += self.gauche.__str__(prefix + "    ", False)
+        return res
 
+H = NoeudBinaire("H")
+M = NoeudBinaire("M")
+N = NoeudBinaire("N")
+I = NoeudBinaire("I", M, N)
+O = NoeudBinaire("O")
 
-gauche_gauche = NoeudBinaire("C")
-gauche_droit = NoeudBinaire("D")
-droite = NoeudBinaire("E")
+D = NoeudBinaire("D", H, I)
+E = NoeudBinaire("E")
+J = NoeudBinaire("J")
+K = NoeudBinaire("K", None, O)
+L = NoeudBinaire("L")
 
-# Sous-arbres
-gauche = NoeudBinaire("B", gauche_gauche, gauche_droit)
-racine = NoeudBinaire("A", gauche, droite)
+F = NoeudBinaire("F", J, None)
+G = NoeudBinaire("G", K, L)
 
-print(racine)
+B = NoeudBinaire("B", D, E)
+C = NoeudBinaire("C", F, G)
+
+A = NoeudBinaire("A", B, C)
+
+# Affichage
+print(A)
