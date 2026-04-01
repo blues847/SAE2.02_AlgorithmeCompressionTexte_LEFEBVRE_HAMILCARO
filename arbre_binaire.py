@@ -50,36 +50,53 @@ class NoeudBinaire:
         res.append(self.valeur)
         return res
     
-    def __str__(self, prefix="", is_root=True):
+    def __str__(self, prefix="", is_left=True, is_root=True):
         res = ""
-        if self.droit:
-            res += self.droit.__str__(prefix + "    ", False)
+
+        # -------- Racine --------
         if is_root:
             res += repr(self.valeur) + "\n"
+            new_prefix = ""
         else:
-            res += prefix[:-4] + "|-- " + repr(self.valeur) + "\n"
+            connector = "├── " if is_left else "└── "
+            res += prefix + connector + repr(self.valeur) + "\n"
+            new_prefix = prefix + ("│   " if is_left else "    ")
+
+        # -------- Sous-arbre gauche --------
         if self.gauche:
-            res += self.gauche.__str__(prefix + "    ", False)
+            res += self.gauche.__str__(new_prefix, True, False)
+        else:
+            # Pas de fils gauche → remplacer par point mais garder le trait
+            res += new_prefix + "├── .\n"
+
+        # -------- Sous-arbre droit --------
+        if self.droit:
+            res += self.droit.__str__(new_prefix, False, False)
+        else:
+            # Pas de fils droit → point avec trait bas
+            res += new_prefix + "└── .\n"
+
         return res
 
-H = NoeudBinaire("H")
-M = NoeudBinaire("M")
-N = NoeudBinaire("N")
-I = NoeudBinaire("I", M, N)
-O = NoeudBinaire("O")
 
-D = NoeudBinaire("D", H, I)
-E = NoeudBinaire("E")
+# Niveau 4
 J = NoeudBinaire("J")
-K = NoeudBinaire("K", None, O)
-L = NoeudBinaire("L")
 
-F = NoeudBinaire("F", J, None)
-G = NoeudBinaire("G", K, L)
+# Niveau 3
+G = NoeudBinaire("G")
+H = NoeudBinaire("H", None, J)
+I = NoeudBinaire("I")
 
+# Niveau 2
+D = NoeudBinaire("D")                # pas d'enfant
+E = NoeudBinaire("E", G, None)       # un seul enfant
+F = NoeudBinaire("F", H, I)          # deux enfants
+
+# Niveau 1
 B = NoeudBinaire("B", D, E)
-C = NoeudBinaire("C", F, G)
+C = NoeudBinaire("C", None, F)
 
+# Racine
 A = NoeudBinaire("A", B, C)
 
 # Affichage
