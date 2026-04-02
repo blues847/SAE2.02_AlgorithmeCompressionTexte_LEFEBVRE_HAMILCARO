@@ -4,119 +4,133 @@ class NoeudBinaire:
     """
     
     #Constructeur
-    def __init__(self, valeur, gauche_ = None, droite_ = None):
-        self.courant = valeur
+    def __init__(self, valeur_ = None, gauche_ = None, droit_ = None):
+        self.valeur = valeur_
         self.gauche = gauche_
-        self.droite = droite_
+        self.droit = droit_
 
     #Getters
     def getValeur(self):
-        return self.courant
+        return self.valeur
     
     def getGauche(self):
         return self.gauche
     
-    def getDroite(self):
-        return self.droite
+    def getDroit(self):
+        return self.droit
     
     #Setters
     def setValeur(self, valeur_):
-        self.courant = valeur_
+        self.valeur = valeur_
         
     def setGauche(self, gauche_):
         self.gauche = gauche_
         
-    def setDroite(self, droite_):
-        self.droite = droite_
+    def setDroit(self, droit_):
+        self.droit = droit_
         
     #Méthodes
         #Sous-arbre gauche
-    def aGauche(self):
-        if self.gauche is not None:
-            return 1
-        else:
-            return 0
+    def a_gauche(self):
+        return self.gauche is not None
         
         #Sous-arbre droit
-    def aDroite(self):
-        if self.droite is not None:
-            return 1
-        else:
-            return 0
-        
+    def a_droit(self):
+        return self.droit is not None
+    
         #Est une feuille
     def estFeuille(self):
-        if not self.aGauche() and not self.aDroite() and self.courant is not None:
-            return 1
-        else:
-            return 0
+        return self.gauche is None and self.droit is None and self.valeur is not None
         
         #Est un arbre vide
     def estVide(self):
-        if not self.aGauche() and not self.aDroite() and self.courant is None:
-            return 1
-        else:
-            return 0
-        
+        return self.valeur is None
+
         #Hauteur
     def hauteur(self):
-        if self.estFeuille() == 1:
+        if self.estFeuille():
             return 1
         elif self.gauche == None:
-            return 1 + self.droite.hauteur()
-        elif self.droite == None:
+            return 1 + self.droit.hauteur()
+        elif self.droit == None:
             return 1 + self.gauche.hauteur()
         else:
-            return 1 + max(self.gauche.hauteur(), self.droite.hauteur())
+            return 1 + max(self.gauche.hauteur(), self.droit.hauteur())
     
         #Affichage de l'arbre dans le terminal
-    def __str__(self, fleche=0, espace=""):
-        #Gestion de la racine qui a un affichage unique,
-        #fleche représente les "niveaux" de l'arbre
-        if fleche > 0:
-            print(espace + "|--> " + self.courant)
-        else:
-            print(self.courant)
-        
-        #Gestion de l'arbre gauche récursivement
-        if self.gauche is not None:
-            if fleche == 0:
-                self.gauche.__str__(fleche + 1, "")
-            else:
-                self.gauche.__str__(fleche + 1, espace + "     ")
-        elif self.droite is not None:
-            # Pas de gauche mais un droite
-            if fleche == 0:
-                print("|--> .")
-            else:
-                print(espace + "     " + "|--> .")
-            
-        #Gestion de l'arbre droit récursivement (même logique)
-        if self.droite is not None:
-            if fleche == 0:
-                self.droite.__str__(fleche + 1, "")
-            else:
-                self.droite.__str__(fleche + 1, espace + "     ")
-        elif self.gauche is not None:
-            # Pas de droite mais un gauche
-            if fleche == 0:
-                print("|--> .")
-            else:
-                print(espace + "     " + "|--> .")
-        
-        return
+    def __str__(self, prefix="", is_left=True, is_root=True):
+        res = ""
 
-        #Parcours préfixe
-    #def parcoursPrefixe(self, liste=[]):
-        
-        #Parcours suffixe
-        
-        #Parcours infixe
-        
+        # -------- Racine --------
+        if is_root:
+            res += repr(self.valeur) + "\n"
+            new_prefix = ""
+        else:
+            connector = "├── " if is_left else "└── "
+            res += prefix + connector + repr(self.valeur) + "\n"
+            new_prefix = prefix + ("│   " if is_left else "    ")
+
+        # -------- Sous-arbre gauche --------
+        if self.gauche:
+            res += self.gauche.__str__(new_prefix, True, False)
+        elif self.droit:
+            # Pas de fils gauche → remplacer par point mais garder le trait
+            res += new_prefix + "├── .\n"
+
+        # -------- Sous-arbre droit --------
+        if self.droit:
+            res += self.droit.__str__(new_prefix, False, False)
+        elif self.gauche:
+            # Pas de fils droit → point avec trait bas
+            res += new_prefix + "└── .\n"
+
+        return res
+
         #Parcours en largeur
+    def parcours_largeur(self):
+        res = []
+        file = [self]  # File d'attente, on commence par la racine
+        
+        while file:
+            noeud = file.pop(0)  # On retire le premier élément
+            res.append(noeud.valeur)
+            
+            if noeud.a_gauche():
+                file.append(noeud.gauche)
+            if noeud.a_droit():
+                file.append(noeud.droit)
+        
+        return res
         
         #Parcours en profondeur
+            #Parcours préfixe
+    def parcours_prefixe(self):
+        res=[self.valeur]
+        if self.a_gauche():
+            res += self.gauche.parcours_prefixe()
+        if self.a_droit():
+            res += self.droit.parcours_prefixe()
+        return res
     
+            #Parcours infixe
+    def parcours_infixe(self):
+        res=[]
+        if self.a_gauche():
+            res += self.gauche.parcours_infixe()
+        res.append(self.valeur)
+        if self.a_droit():
+            res += self.droit.parcours_infixe()
+        return res
+    
+            #Parcours suffixe
+    def parcours_suffixe(self):
+        res=[]
+        if self.a_gauche():
+            res += self.gauche.parcours_suffixe()
+        if self.a_droit():
+            res += self.droit.parcours_suffixe()
+        res.append(self.valeur)
+        return res
     
     
 #Rapides tests intermédiaires   
@@ -132,5 +146,20 @@ b = NoeudBinaire('B', c, d)
 # Arbre de valeur 'A', sous-arbre gauche : b. Sous-arbre droit : e.
 a = NoeudBinaire('A', b, e)
 
-a.__str__()
-print(a.hauteur())
+print("=== Tests ===")
+print("Schema de l'arbre:\n", a.__str__())
+print("Valeur de a:", a.getValeur())              						# A
+print("Valeur de son sous-arbre gauche:", a.getGauche().getValeur())    # B
+print("Valeur de son sous-arbre droit:", a.getDroit().getValeur())    	# A
+print("a a un gauche?", a.a_gauche())             						# True
+print("a a un droit?", a.a_droit())               						# True
+print("g est feuille?", g.estFeuille())           						# True
+print("a est feuille?", a.estFeuille())           						# False
+print("a est vide?", a.estVide())                 						# False
+print("Hauteur depuis a:", a.hauteur())               					# 4
+
+print("\n=== Parcours ===")
+print("Préfixe:", a.parcours_prefixe())       	# ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+print("Infixe:", a.parcours_infixe())          	# ['C', 'B', 'D', 'A', 'E', 'G', 'F']
+print("Suffixe:", a.parcours_suffixe())       	# ['C', 'D', 'B', 'G', 'F', 'E', 'A']
+print("Largeur:", a.parcours_largeur()) 		# ['A', 'B', 'E', 'C', 'D', 'F', 'G']
