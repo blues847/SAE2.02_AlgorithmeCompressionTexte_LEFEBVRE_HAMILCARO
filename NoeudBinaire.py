@@ -146,6 +146,7 @@ b = NoeudBinaire('B', c, d)
 # Arbre de valeur 'A', sous-arbre gauche : b. Sous-arbre droit : e.
 a = NoeudBinaire('A', b, e)
 
+"""
 print("=== Tests ===")
 print("Schema de l'arbre:\n", a.__str__())
 print("Valeur de a:", a.getValeur())              						# A
@@ -163,3 +164,4 @@ print("Préfixe:", a.parcours_prefixe())       	# ['A', 'B', 'C', 'D', 'E', 'F',
 print("Infixe:", a.parcours_infixe())          	# ['C', 'B', 'D', 'A', 'E', 'G', 'F']
 print("Suffixe:", a.parcours_suffixe())       	# ['C', 'D', 'B', 'G', 'F', 'E', 'A']
 print("Largeur:", a.parcours_largeur()) 		# ['A', 'B', 'E', 'C', 'D', 'F', 'G']
+"""
