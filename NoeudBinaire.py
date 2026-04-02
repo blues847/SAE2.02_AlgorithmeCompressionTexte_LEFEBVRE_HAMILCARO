@@ -107,7 +107,7 @@ class NoeudBinaire:
         return
 
         #Parcours préfixe
-    def parcoursPrefixe(self, liste=[]):
+    #def parcoursPrefixe(self, liste=[]):
         
         #Parcours suffixe
         
