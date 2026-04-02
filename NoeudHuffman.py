@@ -1,0 +1,2 @@
+class NoeudHuffman(NoeudBinaire):
+    
