@@ -66,14 +66,12 @@ class NoeudBinaire:
         if self.gauche:
             res += self.gauche.__str__(new_prefix, True, False)
         elif self.droit:
-            # Pas de fils gauche → remplacer par point mais garder le trait
             res += new_prefix + "├── .\n"
 
         # -------- Sous-arbre droit --------
         if self.droit:
             res += self.droit.__str__(new_prefix, False, False)
         elif self.gauche:
-            # Pas de fils droit → point avec trait bas
             res += new_prefix + "└── .\n"
 
         return res
