@@ -76,17 +76,19 @@ class NoeudHuffman(NoeudBinaire):
         """
         cara_prec = ""
         val_prec = 0
-        for c in dico_occur.keys():
-            if cara_prec == "":
-                cara_prec = c
-                val_prec = dico_occur[c]
-            else:
-                cara_nv = cara_prec + c
-                val_nv = val_prec + dico_occur[c]
-                dico_occur[cara_nv] = val_nv
-                dico_occur = dict(sorted(dico_occur.items(), key=lambda item: item[1]))
-                cara_prec = c
-                val_prec = dico_occur[c]
+        while len(dico_occur) != 1:
+            for c in dico_occur.keys():
+                if cara_prec == "":
+                    cara_prec = c
+                    val_prec = dico_occur[c]
+                else:
+                    cara_nv = cara_prec + c
+                    val_nv = val_prec + dico_occur[c]
+                    dico_occur[cara_nv] = val_nv
+                    dico_occur = dict(sorted(dico_occur.items(), key=lambda item: item[1]))
+                    cara_prec = c
+                    val_prec = dico_occur[c]
+                    break
         return dico_occur #JE N'Y ARRIVE PAs
             
    
