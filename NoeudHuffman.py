@@ -4,150 +4,184 @@ class NoeudHuffman(NoeudBinaire):
     """
     Classe qui implémente un arbre d'Huffman, utilisant la classe NoeudBinaire.
     """
-    #Constructeur
-    def __init__(self, chaine = None, poids = None, gauche = None, droit = None):
+
+    # Constructeur
+    def __init__(self, chaine=None, poids=None, gauche=None, droit=None):
+        # La valeur stockée est un couple (chaine, poids)
         super().__init__((chaine, poids), gauche, droit)
-        
-    #Getters
+
+    # Getters
     def getChaine(self):
         return self.valeur[0]
-    
+
     def getPoids(self):
         return self.valeur[1]
-    
-    #Setters
+
+    # Setters
     def setValeur(self, chaine_, poids_):
         self.valeur = (chaine_, poids_)
-        
+
     def setChaine(self, chaine_):
-        poids_ = self.valeur[1]
-        self.valeur = (chaine_, poids_)
-        
+        self.valeur = (chaine_, self.valeur[1])
+
     def setPoids(self, poids_):
-        chaine_ = self.valeur[0]
-        self.valeur = (chaine_, poids_)
-        
-    #Méthodes
+        self.valeur = (self.valeur[0], poids_)
+
+    # Méthodes
     """
     Construire un arbre de Huffman à partir d'une chaîne de caractères reçue en paramètre :
         - Par pair (et deux pairs par deux pairs) concaténer les caractères
-            et additionner leurs poids
+          et additionner leurs poids
         - Ajouter à l'arbre au moment de la concaténation les caractères seuls
-            et leurs nouveaux parents (niveau 1)
+          et leurs nouveaux parents
         - Continuer ainsi jusqu'à avoir la chaine entière en racine
-        - permettre l'affichage de cet arbre
-        
+        - Permettre l'affichage de cet arbre
+
     A partir d'une chaine de caractères et d'un arbre d'Huffman associé,
     calculer le nouvel encodage après compression de chaque caractère :
-        - Utiliser l'arbre (et les relation noeud - sous-arbre) pour retracer l'encodage (stocker)
-        - Potentiellement le rendre disponible à l'aide des différents parcours?
-        
+        - Utiliser l'arbre (relation noeud - sous-arbre) pour retracer l'encodage
+
     A partir d'une chaine de caractères et d'un encodage d'Huffman associé,
-    construire et renvoyer la chaîne de caracère obtenu après compression :
-        - Fonction qui encode une chaine avec un encodage prédéfini?
-        
+    construire et renvoyer la chaîne de caractères obtenue après compression
+
     Bonus :
         - afficher les 0 et les 1 dans l'affichage de l'arbre d'Huffman
     """
-    
+
+    # 1. Comptage des occurrences
     @staticmethod
     def compte_Occurrences(chaine):
         """
-        Cette méthode prend en paramètre une chaîne de caractère
-        et renvoie un dictionnaire ayant pour clé chaque caractère (sans doublons)
-        et pour valeur le nombre d'apparition de ce caractère dans la chaîne.
-        Le dictionnaire est trié par ordre croissant de valeur (pas de clé).
+        Cette méthode prend en paramètre une chaîne de caractères
+        et renvoie un dictionnaire ayant pour clé chaque caractère
+        et pour valeur le nombre d'apparitions de ce caractère.
+        Le dictionnaire est trié par ordre croissant de fréquence.
         """
-        frequence = dict()
+        frequence = {}
         for caractere in chaine:
-            if caractere not in frequence.keys():
+            if caractere not in frequence:
                 frequence[caractere] = 1
             else:
                 frequence[caractere] += 1
+
+        # Tri par fréquence croissante
         frequence = dict(sorted(frequence.items(), key=lambda item: item[1]))
         return frequence
-    
+
+    # 2. Construction de l'arbre de Huffman
     @staticmethod
     def concatenation(dico_occur):
         """
         Cette méthode reçoit en paramètre un dictionnaire des
-        occurences des caractères dans une chaîné trié par ordre croissant.
-        Il créé des NoeudHuffman selon la logique de l'arbre d'Huffman.
+        occurrences des caractères dans une chaîne trié par ordre croissant.
+        Elle construit l'arbre de Huffman et renvoie la racine.
         """
-        cara_prec = ""
-        val_prec = 0
-        while len(dico_occur) != 1:
-            for c in dico_occur.keys():
-                if cara_prec == "":
-                    cara_prec = c
-                    val_prec = dico_occur[c]
-                else:
-                    cara_nv = cara_prec + c
-                    val_nv = val_prec + dico_occur[c]
-                    dico_occur[cara_nv] = val_nv
-                    dico_occur = dict(sorted(dico_occur.items(), key=lambda item: item[1]))
-                    cara_prec = c
-                    val_prec = dico_occur[c]
-                    break
-        return dico_occur #JE N'Y ARRIVE PAs
-            
-   
-#Tests
-    #Initialisation d'un arbre (exemple tiré du cahier technique)
-v = NoeudHuffman("r", 2, None, None)
-w = NoeudHuffman("n", 2, None, None)
-x = NoeudHuffman("b", 2, None, None)
-y = NoeudHuffman("nr", 4, w, v)
-z = NoeudHuffman("nrb", 6, y, x)
-k = NoeudHuffman("j", 1, None, None)
-j = NoeudHuffman("i", 1, None, None)
-i = NoeudHuffman("u", 1, None, None)
-h = NoeudHuffman("s", 1, None, None)
-g = NoeudHuffman("ij", 2, j, k)
-f = NoeudHuffman("su", 2, h, i)
-d = NoeudHuffman("ijsu", 4, f, g)
-c = NoeudHuffman("o", 2, None, None)
-b = NoeudHuffman("oijsu", 6, c, d)
-a = NoeudHuffman("oijsunrb", 14, b, z)
 
-    #Deuxième arbre plus complexe ("Quelque chose")
-A = NoeudHuffman("s", 1, None, None)
-B = NoeudHuffman("o", 1, None, None)
-C = NoeudHuffman("h", 1, None, None)
-D = NoeudHuffman("c", 1, None, None)
-E = NoeudHuffman("q", 1, None, None)
-F = NoeudHuffman("l", 1, None, None)
-G = NoeudHuffman(" ", 1, None, None)
-H = NoeudHuffman("Q", 1, None, None)
-I = NoeudHuffman("u", 2, None, None)
-K = NoeudHuffman("so", 2, A, B)
-L = NoeudHuffman("hc", 2, C, D)
-M = NoeudHuffman("ql", 2, E, F)
-N = NoeudHuffman(" Q", 2, G, H)
-J = NoeudHuffman("e", 3, None, None)
-O = NoeudHuffman("uso", 4, I, K)
-P = NoeudHuffman("hcql", 4, L, M)
-Q = NoeudHuffman(" Qe", 5, N, J)
-R = NoeudHuffman("usohcql", 8, O, P)
-S = NoeudHuffman(" Qeusohcql", 13, Q, R)
+        # Création des feuilles
+        noeuds = []
+        for caractere, poids in dico_occur.items():
+            noeuds.append(NoeudHuffman(caractere, poids, None, None))
 
-    #Constructeur, getters, setters
-print("===[Tests] : constructeur, getters, setters===")
-print("La valeur de la racine est : ", a.getValeur())
-print("Sa chaîne est : ", a.getChaine())
-print("Son poids est : ", a.getPoids())
-print("Test : changer son poids, puis sa chaîne, pour enfin les remettre aux valeurs initiales.")
-print("Test de setValeur()")
-a.setValeur("reussite", 200)
-print("Sa nouvelle valeur est donc : ", a.getValeur())
-print("Test de setChaine() et de setPoids()")
-a.setChaine("oijsunrb")
-a.setPoids(14)
-print("Sa nouvelle valeur est donc : ", a.getValeur())
-print(a.__str__())
+        # Construction progressive de l'arbre
+        while len(noeuds) > 1:
+            # Trie la liste noeuds en utilisant comme critère le poids de chaque noeud et pas la clé
+            noeuds.sort(key=lambda n: n.getPoids())
 
-    #Méthodes
-print("===[Tests] : méthodes===")
-dico_ex2 = NoeudHuffman.compte_Occurrences('Quelque chose')
-print(f"\nDictionnaire des occurences d'un caractère dans une chaîne : \n{dico_ex2}")
-print(f"Nouveau dico : {NoeudHuffman.concatenation(dico_ex2)}")
+            # Prendre les deux plus petits
+            gauche = noeuds.pop(0)
+            droite = noeuds.pop(0)
+
+            # Créer le noeud parent
+            nouvelle_chaine = gauche.getChaine() + droite.getChaine()
+            nouveau_poids = gauche.getPoids() + droite.getPoids()
+
+            parent = NoeudHuffman(nouvelle_chaine,nouveau_poids,gauche,droite)
+
+            # Réinsérer le noeud parent
+            noeuds.append(parent)
+
+        # Le dernier noeud est la racine
+        return noeuds[0]
+
+    # 3. Génération des codes de Huffman
+    @staticmethod
+    def generer_codes(racine):
+        """
+        Génère le code de Huffman de chaque caractère
+        à partir de l'arbre de Huffman.
+        """
+        codes = {}
+
+        def parcours(noeud, code):
+            if noeud.estFeuille():
+                codes[noeud.getChaine()] = code
+                return
+
+            if noeud.gauche:
+                parcours(noeud.gauche, code + "0")
+            if noeud.droit:
+                parcours(noeud.droit, code + "1")
+
+        parcours(racine, "")
+        return codes
+
+    # 4. Compression
+    @staticmethod
+    def compresser(chaine, codes):
+        """
+        Compresse une chaîne de caractères à l'aide
+        du dictionnaire de codes Huffman.
+        """
+        resultat = ""
+        for caractere in chaine:
+            resultat += codes[caractere]
+        return resultat
+
+    # 5. Décompression
+    @staticmethod
+    def decompresser(binaire, racine):
+        """
+        Décompresse une chaîne binaire à l'aide
+        de l'arbre de Huffman.
+        """
+        resultat = ""
+        noeud = racine
+
+        for bit in binaire:
+            if bit == "0":
+                noeud = noeud.gauche
+            else:
+                noeud = noeud.droit
+
+            if noeud.estFeuille():
+                resultat += noeud.getChaine()
+                noeud = racine
+
+        return resultat
+
+
+# Tests temporaires
+if __name__ == "__main__":
+    texte = "J'ai pas d'inspiration pour le test"
+
+    print("Texte :", texte)
+
+    dico = NoeudHuffman.compte_Occurrences(texte)
+    print("\nDictionnaire des occurrences :")
+    print(dico)
+
+    racine = NoeudHuffman.concatenation(dico)
+    print("\nArbre de Huffman :")
+    print(racine)
+
+    codes = NoeudHuffman.generer_codes(racine)
+    print("\nCodes de Huffman :")
+    print(codes)
+
+    compresse = NoeudHuffman.compresser(texte, codes)
+    print("\nTexte compressé :")
+    print(compresse)
+
+    decompresse = NoeudHuffman.decompresser(compresse, racine)
+    print("\nTexte décompressé :")
+    print(decompresse)
