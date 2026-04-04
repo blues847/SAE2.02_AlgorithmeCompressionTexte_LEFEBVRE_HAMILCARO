@@ -131,37 +131,3 @@ class NoeudBinaire:
             res += self.droit.parcours_suffixe()
         res.append(self.valeur)
         return res
-    
-    
-#Rapides tests intermédiaires   
-g = NoeudBinaire('G', None, None) # Arbre de valeur 'G', sans sous-arbre (feuille)
-# Arbre de valeur 'F'. Sous-arbre gauche : g. Pas sous-arbre droit.
-f = NoeudBinaire('F', g, None)
-# Arbre de valeur 'E'. Pas de sous-arbre gauche. Sous-arbre droit : f
-e = NoeudBinaire('E', None, f)
-d = NoeudBinaire('D', None, None) # Arbre de valeur 'D', sans sous-arbres (feuille)
-c = NoeudBinaire('C', None, None) # Arbre de valeur 'C', sans sous-arbres (feuille)
-# Arbre de valeur 'B', sous-arbre gauche : c. Sous-arbre droit : d.
-b = NoeudBinaire('B', c, d)
-# Arbre de valeur 'A', sous-arbre gauche : b. Sous-arbre droit : e.
-a = NoeudBinaire('A', b, e)
-
-"""
-print("=== Tests ===")
-print("Schema de l'arbre:\n", a.__str__())
-print("Valeur de a:", a.getValeur())              						# A
-print("Valeur de son sous-arbre gauche:", a.getGauche().getValeur())    # B
-print("Valeur de son sous-arbre droit:", a.getDroit().getValeur())    	# A
-print("a a un gauche?", a.a_gauche())             						# True
-print("a a un droit?", a.a_droit())               						# True
-print("g est feuille?", g.estFeuille())           						# True
-print("a est feuille?", a.estFeuille())           						# False
-print("a est vide?", a.estVide())                 						# False
-print("Hauteur depuis a:", a.hauteur())               					# 4
-
-print("\n=== Parcours ===")
-print("Préfixe:", a.parcours_prefixe())       	# ['A', 'B', 'C', 'D', 'E', 'F', 'G']
-print("Infixe:", a.parcours_infixe())          	# ['C', 'B', 'D', 'A', 'E', 'G', 'F']
-print("Suffixe:", a.parcours_suffixe())       	# ['C', 'D', 'B', 'G', 'F', 'E', 'A']
-print("Largeur:", a.parcours_largeur()) 		# ['A', 'B', 'E', 'C', 'D', 'F', 'G']
-"""
