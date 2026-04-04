@@ -30,8 +30,6 @@ class NoeudHuffman(NoeudBinaire):
     #Méthodes
     """
     Construire un arbre de Huffman à partir d'une chaîne de caractères reçue en paramètre :
-        - Compter le nombre d'occurence de chaque caractère (stocker)
-        - Trier caractère en ordre décroissant d'occurence (stocker)
         - Par pair (et deux pairs par deux pairs) concaténer les caractères
             et additionner leurs poids
         - Ajouter à l'arbre au moment de la concaténation les caractères seuls
@@ -52,15 +50,45 @@ class NoeudHuffman(NoeudBinaire):
         - afficher les 0 et les 1 dans l'affichage de l'arbre d'Huffman
     """
     
-    def compteOccurrences(chaine):
+    @staticmethod
+    def compte_Occurrences(chaine):
+        """
+        Cette méthode prend en paramètre une chaîne de caractère
+        et renvoie un dictionnaire ayant pour clé chaque caractère (sans doublons)
+        et pour valeur le nombre d'apparition de ce caractère dans la chaîne.
+        Le dictionnaire est trié par ordre croissant de valeur (pas de clé).
+        """
         frequence = dict()
         for caractere in chaine:
-            if caractere in frequence.keys():
-                frequence[caractere] += 1
-            else:
+            if caractere not in frequence.keys():
                 frequence[caractere] = 1
+            else:
+                frequence[caractere] += 1
+        frequence = dict(sorted(frequence.items(), key=lambda item: item[1]))
         return frequence
-
+    
+    @staticmethod
+    def concatenation(dico_occur):
+        """
+        Cette méthode reçoit en paramètre un dictionnaire des
+        occurences des caractères dans une chaîné trié par ordre croissant.
+        Il créé des NoeudHuffman selon la logique de l'arbre d'Huffman.
+        """
+        cara_prec = ""
+        val_prec = 0
+        for c in dico_occur.keys():
+            if cara_prec == "":
+                cara_prec = c
+                val_prec = dico_occur[c]
+            else:
+                cara_nv = cara_prec + c
+                val_nv = val_prec + dico_occur[c]
+                dico_occur[cara_nv] = val_nv
+                dico_occur = dict(sorted(dico_occur.items(), key=lambda item: item[1]))
+                cara_prec = c
+                val_prec = dico_occur[c]
+        return dico_occur #JE N'Y ARRIVE PAs
+            
    
 #Tests
     #Initialisation d'un arbre (exemple tiré du cahier technique)
@@ -80,7 +108,29 @@ c = NoeudHuffman("o", 2, None, None)
 b = NoeudHuffman("oijsu", 6, c, d)
 a = NoeudHuffman("oijsunrb", 14, b, z)
 
+    #Deuxième arbre plus complexe ("Quelque chose")
+A = NoeudHuffman("s", 1, None, None)
+B = NoeudHuffman("o", 1, None, None)
+C = NoeudHuffman("h", 1, None, None)
+D = NoeudHuffman("c", 1, None, None)
+E = NoeudHuffman("q", 1, None, None)
+F = NoeudHuffman("l", 1, None, None)
+G = NoeudHuffman(" ", 1, None, None)
+H = NoeudHuffman("Q", 1, None, None)
+I = NoeudHuffman("u", 2, None, None)
+K = NoeudHuffman("so", 2, A, B)
+L = NoeudHuffman("hc", 2, C, D)
+M = NoeudHuffman("ql", 2, E, F)
+N = NoeudHuffman(" Q", 2, G, H)
+J = NoeudHuffman("e", 3, None, None)
+O = NoeudHuffman("uso", 4, I, K)
+P = NoeudHuffman("hcql", 4, L, M)
+Q = NoeudHuffman(" Qe", 5, N, J)
+R = NoeudHuffman("usohcql", 8, O, P)
+S = NoeudHuffman(" Qeusohcql", 13, Q, R)
+
     #Constructeur, getters, setters
+print("===[Tests] : constructeur, getters, setters===")
 print("La valeur de la racine est : ", a.getValeur())
 print("Sa chaîne est : ", a.getChaine())
 print("Son poids est : ", a.getPoids())
@@ -93,3 +143,9 @@ a.setChaine("oijsunrb")
 a.setPoids(14)
 print("Sa nouvelle valeur est donc : ", a.getValeur())
 print(a.__str__())
+
+    #Méthodes
+print("===[Tests] : méthodes===")
+dico_ex2 = NoeudHuffman.compte_Occurrences('Quelque chose')
+print(f"\nDictionnaire des occurences d'un caractère dans une chaîne : \n{dico_ex2}")
+print(f"Nouveau dico : {NoeudHuffman.concatenation(dico_ex2)}")
