@@ -46,6 +46,8 @@ class NoeudHuffman(NoeudBinaire):
 
     Bonus :
         - afficher les 0 et les 1 dans l'affichage de l'arbre d'Huffman
+        
+    Pouvoir affciher le poid avant et apres compresion du texte (obligatoire je crois)
     """
 
     # 1. Comptage des occurrences
@@ -158,30 +160,3 @@ class NoeudHuffman(NoeudBinaire):
                 noeud = racine
 
         return resultat
-
-
-# Tests temporaires
-if __name__ == "__main__":
-    texte = "J'ai pas d'inspiration pour le test"
-
-    print("Texte :", texte)
-
-    dico = NoeudHuffman.compte_Occurrences(texte)
-    print("\nDictionnaire des occurrences :")
-    print(dico)
-
-    racine = NoeudHuffman.concatenation(dico)
-    print("\nArbre de Huffman :")
-    print(racine)
-
-    codes = NoeudHuffman.generer_codes(racine)
-    print("\nCodes de Huffman :")
-    print(codes)
-
-    compresse = NoeudHuffman.compresser(texte, codes)
-    print("\nTexte compressé :")
-    print(compresse)
-
-    decompresse = NoeudHuffman.decompresser(compresse, racine)
-    print("\nTexte décompressé :")
-    print(decompresse)
