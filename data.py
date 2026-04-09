@@ -2,7 +2,7 @@ def nettoyer_ascii(texte, utiliser_unidecode=True):
     """
     Nettoie un texte pour le rendre ASCII.
     - Si utiliser_unidecode=True et que unidecode est disponible : on l'utilise
-    - Sinon : on utilise une méthode de remplacement simple
+    - Sinon : on utilise le programme de secours
     """
 
     if utiliser_unidecode:
@@ -10,7 +10,7 @@ def nettoyer_ascii(texte, utiliser_unidecode=True):
             from unidecode import unidecode
             return unidecode(texte)
         except ModuleNotFoundError:
-            print("[INFO] unidecode non disponible, utilisation du mode ASCII simple.")
+            print("[INFO] unidecode non disponible, utilisation du programme de secours.")
 
     # Méthode de secours (sans bibliothèque)
     remplacements = {
