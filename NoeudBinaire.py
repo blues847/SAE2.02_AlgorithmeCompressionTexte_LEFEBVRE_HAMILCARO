@@ -68,7 +68,7 @@ class NoeudBinaire:
         else:
             connector = "├── " if is_left else "└── "
             res += prefix + connector + repr(self.valeur) + "\n"
-            new_prefix = prefix + ("│   " if is_left else "    ")
+            new_prefix = prefix + ("|   " if is_left else "    ")
 
         # -------- Sous-arbre gauche --------
         if self.gauche:
