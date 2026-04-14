@@ -3,61 +3,45 @@ import os
 from NoeudHuffman import NoeudHuffman
 from data import nettoyer_ascii
 
-def traiter_fichier(chemin_fichier):
+def compresser_texte(chemin_fichier):
     """
-    Fonction qui applique l'algorithme d'Huffman à un fichier
-    et affiche les statistiques à la fin.
+    Fonction qui applique l'algorithme d'Huffman à un fichier.
+    Renvoie les éléments clés. Prend en paramètre le chemin du fichier.
     """
-    return
-
-def main():
-    # 1. Texte original
-    texte_original = "J'ai toujours aucune idée pour le têst"
-
-    print("Texte original :")
-    print(texte_original)
-    print()
-
-    # 2. Nettoyage ASCII (OBLIGATOIRE)
-    texte = nettoyer_ascii(texte_original)
-
-    print("Texte après nettoyage ASCII :")
-    print(texte)
-    print()
-
-    # 3. Huffman (à partir du texte nettoyé)
-    dico = NoeudHuffman.compte_Occurrences(texte)
-    print("Occurrences :")
-    print(dico)
-    print()
-
+    dico = NoeudHuffman.compte_Occurences(texte)
     racine = NoeudHuffman.concatenation(dico)
-    print("Arbre de Huffman :")
-    print(racine)
-    print()
-
     codes = NoeudHuffman.generer_codes(racine)
-    print("Codes de Huffman :")
-    print(codes)
-    print()
+    texte_compresse = NoeufHuffman.compresser(texte, codes)
+    return texte_compresse, racine
 
-    # 4. Compression
-    texte_compresse = NoeudHuffman.compresser(texte, codes)
-    print("Texte compressé :")
-    print(texte_compresse)
-    print()
-
+def afficher_stat():
+    """
+    Calcule / affiche les tailles avant et après compression (taux de compression).
+    """
+    
+def verifier_decompression():
+    """
+    Décompresse le texte et vérifie qu'il correspond à l'original.
+    Ne renvoie rien.
+    """
     # 5. Décompression (vérification)
     texte_decompresse = NoeudHuffman.decompresser(texte_compresse, racine)
-    print("Texte décompressé :")
-    print(texte_decompresse)
     print()
-
+    
     # 6. Vérification finale
     if texte == texte_decompresse:
-        print("TEST OK : compression / décompression cohérentes")
+        print("TEST OK : texte avant / après compression cohérent")
     else:
-        print("ERREUR : incohérence après décompression")
+        print("ERREUR : incohérence.s après décompression")
+    
+def traiter_fichier(chemin_fichier):
+    """
+    Appelle les focntions pour gérer le traitement complet d'un fichier."
+    """
+    # 2. Nettoyage ASCII (OBLIGATOIRE)
+    texte = nettoyer_ascii(texte_original)
+    
+def main():
 
 
 if __name__ == "__main__":
