@@ -14,10 +14,16 @@ def compresser_texte(chemin_fichier):
     texte_compresse = NoeufHuffman.compresser(texte, codes)
     return texte_compresse, racine
 
-def afficher_stat():
+def afficher_stat(texte_propre, texte_compresse):
     """
     Calcule / affiche les tailles avant et après compression (taux de compression).
     """
+    taille_init = len(texte_propre) * 8
+    taille_compressee = len(texte_compresse)
+    
+    #A afficher ailleurs que dans la console? (une page séparée? un fichier de bilan?)
+    print(f"Taille initiale : {taille_init} bits.")
+    print(f"Taille compressée : {taille_compressee} bits.")
     
 def verifier_decompression():
     """
