@@ -3,10 +3,11 @@ import os
 from NoeudHuffman import NoeudHuffman
 from data import nettoyer_ascii
 
-def compresser_texte(chemin_fichier):
+def compresser_texte(texte):
     """
     Fonction qui applique l'algorithme d'Huffman à un fichier.
-    Renvoie les éléments clés. Prend en paramètre le chemin du fichier.
+    Renvoie les éléments clés. Prend en paramètre le texte
+    sous forme d'un chaîne de caractères.
     """
     dico = NoeudHuffman.compte_Occurences(texte)
     racine = NoeudHuffman.concatenation(dico)
@@ -25,26 +26,34 @@ def afficher_stat(texte_propre, texte_compresse):
     print(f"Taille initiale : {taille_init} bits.")
     print(f"Taille compressée : {taille_compressee} bits.")
     
-def verifier_decompression():
+    if taille_init > 0:
+        #Calcul du taux de compression (formule)
+        taux = (1 - taille_compressee / taille_initiale) * 100
+        print(f"Taux de compression : {}")
+    else:
+        print("Fichier vide, pas de compression.\n")
+    
+def verifier_decompression(texte_propre, texte_compresse, racine):
     """
     Décompresse le texte et vérifie qu'il correspond à l'original.
     Ne renvoie rien.
     """
-    # 5. Décompression (vérification)
+    # Décompression
     texte_decompresse = NoeudHuffman.decompresser(texte_compresse, racine)
     print()
     
-    # 6. Vérification finale
-    if texte == texte_decompresse:
+    # Vérification
+    if texte_propre == texte_decompresse:
         print("TEST OK : texte avant / après compression cohérent")
     else:
         print("ERREUR : incohérence.s après décompression")
     
 def traiter_fichier(chemin_fichier):
     """
-    Appelle les focntions pour gérer le traitement complet d'un fichier."
+    Appelle les focntions pour gérer le traitement complet d'un fichier.
+    Prends en paramètres le chemin du fichier."
     """
-    # 2. Nettoyage ASCII (OBLIGATOIRE)
+    # Nettoyage ASCII
     texte = nettoyer_ascii(texte_original)
     
 def main():
