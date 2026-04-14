@@ -1,6 +1,14 @@
+import sys
+import os
 from NoeudHuffman import NoeudHuffman
 from data import nettoyer_ascii
 
+def traiter_fichier(chemin_fichier):
+    """
+    Fonction qui applique l'algorithme d'Huffman à un fichier
+    et affiche les statistiques à la fin.
+    """
+    return
 
 def main():
     # 1. Texte original
