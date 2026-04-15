@@ -1,67 +1,70 @@
 class NoeudBinaire:
-    """
-    Cette classe implémente un noeud appartenant à un arbre binaire.
-    """
+    """Implémente un noeud pour un arbre binaire."""
     
-    #Constructeur
-    def __init__(self, valeur_ = None, gauche_ = None, droit_ = None):
-        self.valeur = valeur_
-        self.gauche = gauche_
-        self.droit = droit_
+    def __init__(self, valeur=None, gauche=None, droit=None):
+        """Initialise un noeud."""
+        self.valeur = valeur
+        self.gauche = gauche
+        self.droit = droit
 
-    #Getters
+    # Getters
     def getValeur(self):
+        """Retourne la valeur du noeud."""
         return self.valeur
     
     def getGauche(self):
+        """Retourne le sous-arbre gauche."""
         return self.gauche
     
     def getDroit(self):
+        """Retourne le sous-arbre droit."""
         return self.droit
     
-    #Setters
+    # Setters
     def setValeur(self, valeur_):
+        """Définit la valeur du noeud."""
         self.valeur = valeur_
         
     def setGauche(self, gauche_):
+        """Définit le sous-arbre gauche."""
         self.gauche = gauche_
         
     def setDroit(self, droit_):
+        """Définit le sous-arbre droit."""
         self.droit = droit_
         
-    #Méthodes
-        #Sous-arbre gauche
+    # Méthodes
     def a_gauche(self):
+        """Vérifie l'existence d'un sous-arbre gauche."""
         return self.gauche is not None
         
-        #Sous-arbre droit
     def a_droit(self):
+        """Vérifie l'existence d'un sous-arbre droit."""
         return self.droit is not None
     
-        #Est une feuille
     def estFeuille(self):
+        """Vérifie si le noeud est une feuille."""
         return self.gauche is None and self.droit is None and self.valeur is not None
         
-        #Est un arbre vide
     def estVide(self):
+        """Vérifie si l'arbre est vide."""
         return self.valeur is None
 
-        #Hauteur
     def hauteur(self):
+        """Calcule la hauteur de l'arbre."""
         if self.estFeuille():
             return 1
-        elif self.gauche == None:
+        elif self.gauche is None:
             return 1 + self.droit.hauteur()
-        elif self.droit == None:
+        elif self.droit is None:
             return 1 + self.gauche.hauteur()
         else:
             return 1 + max(self.gauche.hauteur(), self.droit.hauteur())
     
-        #Affichage de l'arbre dans le terminal
     def __str__(self, prefix="", is_left=True, is_root=True):
+        """Représentation textuelle de l'arbre pour l'affichage."""
         res = ""
 
-        # -------- Racine --------
         if is_root:
             res += repr(self.valeur) + "\n"
             new_prefix = ""
@@ -70,29 +73,25 @@ class NoeudBinaire:
             res += prefix + connector + repr(self.valeur) + "\n"
             new_prefix = prefix + ("|   " if is_left else "    ")
 
-        # -------- Sous-arbre gauche --------
         if self.gauche:
             res += self.gauche.__str__(new_prefix, True, False)
         elif self.droit:
-            # Pas de fils gauche → remplacer par point mais garder le trait
-            res += new_prefix + "├── .\n"
+            res += new_prefix + "├── .\n"  # Marqueur pour fils manquant
 
-        # -------- Sous-arbre droit --------
         if self.droit:
             res += self.droit.__str__(new_prefix, False, False)
         elif self.gauche:
-            # Pas de fils droit → point avec trait bas
-            res += new_prefix + "└── .\n"
+            res += new_prefix + "└── .\n"  # Marqueur pour fils manquant
 
         return res
 
-        #Parcours en largeur
     def parcours_largeur(self):
+        """Parcours de l'arbre en largeur."""
         res = []
-        file = [self]  # File d'attente, on commence par la racine
+        file = [self]
         
         while file:
-            noeud = file.pop(0)  # On retire le premier élément
+            noeud = file.pop(0)
             res.append(noeud.valeur)
             
             if noeud.a_gauche():
@@ -102,19 +101,18 @@ class NoeudBinaire:
         
         return res
         
-        #Parcours en profondeur
-            #Parcours préfixe
     def parcours_prefixe(self):
-        res=[self.valeur]
+        """Parcours préfixe (racine, gauche, droit)."""
+        res = [self.valeur]
         if self.a_gauche():
             res += self.gauche.parcours_prefixe()
         if self.a_droit():
             res += self.droit.parcours_prefixe()
         return res
     
-            #Parcours infixe
     def parcours_infixe(self):
-        res=[]
+        """Parcours infixe (gauche, racine, droit)."""
+        res = []
         if self.a_gauche():
             res += self.gauche.parcours_infixe()
         res.append(self.valeur)
@@ -122,9 +120,9 @@ class NoeudBinaire:
             res += self.droit.parcours_infixe()
         return res
     
-            #Parcours suffixe
     def parcours_suffixe(self):
-        res=[]
+        """Parcours suffixe (gauche, droit, racine)."""
+        res = []
         if self.a_gauche():
             res += self.gauche.parcours_suffixe()
         if self.a_droit():
