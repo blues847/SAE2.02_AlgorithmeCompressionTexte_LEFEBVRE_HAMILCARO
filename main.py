@@ -10,7 +10,7 @@ def compresser_texte(texte):
     sous forme d'un chaîne de caractères.
     """
     # Création du dictionnaire d'occurences des caractères
-    dico = NoeudHuffman.compte_Occurences(texte)
+    dico = NoeudHuffman.compte_Occurrences(texte)
     
     # Création de l'arbre de Huffman
     racine = NoeudHuffman.concatenation(dico)
@@ -19,10 +19,26 @@ def compresser_texte(texte):
     codes = NoeudHuffman.generer_codes(racine)
     
     # Compression du texte
-    texte_compresse = NoeufHuffman.compresser(texte, codes)
-    return texte_compresse, racine
+    texte_compresse = NoeudHuffman.compresser(texte, codes)
+    
+    return texte_compresse, racine, codes
 
 
+def afficher_infos(racine, codes):
+    """
+    Affiche l'arbre et les encodages selon la logique d'Huffman.
+    Reçoit en paramètre la racine d'un arbre d'Huffman (objet NoeudHuffman)
+    et les codes servant à l'encodage des caractères.
+    """
+    print("\n=== Informations ===")
+    print("Arbre de Huffman généré :") #Affichage de l'arbre
+    print(racine)
+    print("\nTable des codes de Huffman :") #Affichage des codes
+    for caractere, code in sorted(codes.items()):
+        print(f"   {repr(caractere):<10} -> {code}")
+    print("=" * 20 + "\n")
+    
+    
 def afficher_stat(texte_propre, texte_compresse):
     """
     Calcule / affiche les tailles avant et après compression (taux de compression).
@@ -36,8 +52,8 @@ def afficher_stat(texte_propre, texte_compresse):
     
     if taille_init > 0:
         #Calcul du taux de compression (formule)
-        taux = (1 - taille_compressee / taille_initiale) * 100
-        print(f"Taux de compression : {}")
+        taux = (1 - taille_compressee / taille_init) * 100
+        print(f"Taux de compression : {taux}")
     else:
         print("Fichier vide, pas de compression.\n")
     
@@ -63,7 +79,7 @@ def traiter_fichier(chemin_fichier):
     Appelle les focntions pour gérer le traitement complet d'un fichier.
     Prends en paramètres le chemin du fichier."
     """
-    print(f"Fichier : {os.path.basename(chemin_fichier)}")
+    print(f" ----- Fichier : {os.path.basename(chemin_fichier)}")
     
     # Lecture du fichier, gestion d'une potentielle erreur
     try:
@@ -80,10 +96,13 @@ def traiter_fichier(chemin_fichier):
         return
     
     # Compression
-    texte_compresse, racine = compresser_texte(texte_propre)
+    texte_compresse, racine, codes = compresser_texte(texte_propre)
     
     # Affichage des résultats
     afficher_stat(texte_propre, texte_compresse)
+    
+    # Affichage des informations complémentaires
+    afficher_infos(racine, codes)
     
     # Vérification
     verifier_decompression(texte_propre, texte_compresse, racine)
