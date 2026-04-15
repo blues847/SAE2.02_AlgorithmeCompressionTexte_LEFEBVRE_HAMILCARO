@@ -32,7 +32,15 @@ def afficher_infos(racine, codes):
     """
     print("\n=== Informations ===")
     print("Arbre de Huffman généré :") #Affichage de l'arbre
-    print(racine)
+    
+    lignes_arbre = racine.get_printable_representation()
+    for ligne in lignes_arbre:
+        try:
+            print(ligne)
+        except UnicodeEncodeError:
+            # En cas d'échec, on affiche une version "nettoyée" de la ligne
+            print(ligne.encode('utf-8', 'replace').decode('ascii', 'replace'))
+    
     print("\nTable des codes de Huffman :") #Affichage des codes
     for caractere, code in sorted(codes.items()):
         print(f"   {repr(caractere):<10} -> {code}")

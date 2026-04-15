@@ -27,30 +27,8 @@ class NoeudHuffman(NoeudBinaire):
     def setPoids(self, poids_):
         self.valeur = (self.valeur[0], poids_)
 
-    # Méthodes
-    """
-    Construire un arbre de Huffman à partir d'une chaîne de caractères reçue en paramètre :
-        - Par pair (et deux pairs par deux pairs) concaténer les caractères
-          et additionner leurs poids
-        - Ajouter à l'arbre au moment de la concaténation les caractères seuls
-          et leurs nouveaux parents
-        - Continuer ainsi jusqu'à avoir la chaine entière en racine
-        - Permettre l'affichage de cet arbre
-
-    A partir d'une chaine de caractères et d'un arbre d'Huffman associé,
-    calculer le nouvel encodage après compression de chaque caractère :
-        - Utiliser l'arbre (relation noeud - sous-arbre) pour retracer l'encodage
-
-    A partir d'une chaine de caractères et d'un encodage d'Huffman associé,
-    construire et renvoyer la chaîne de caractères obtenue après compression
-
-    Bonus :
-        - afficher les 0 et les 1 dans l'affichage de l'arbre d'Huffman
-        
-    Pouvoir affciher le poid avant et apres compresion du texte (obligatoire je crois)
-    """
-
-    # 1. Comptage des occurrences
+    #======= Méthodes =======
+    # Comptage des occurrences
     @staticmethod
     def compte_Occurrences(chaine):
         """
@@ -70,7 +48,7 @@ class NoeudHuffman(NoeudBinaire):
         frequence = dict(sorted(frequence.items(), key=lambda item: item[1]))
         return frequence
 
-    # 2. Construction de l'arbre de Huffman
+    # Construction de l'arbre de Huffman
     @staticmethod
     def concatenation(dico_occur):
         """
@@ -105,7 +83,7 @@ class NoeudHuffman(NoeudBinaire):
         # Le dernier noeud est la racine
         return noeuds[0]
 
-    # 3. Génération des codes de Huffman
+    # Génération des codes de Huffman
     @staticmethod
     def generer_codes(racine):
         """
@@ -127,7 +105,7 @@ class NoeudHuffman(NoeudBinaire):
         parcours(racine, "")
         return codes
 
-    # 4. Compression
+    # Compression
     @staticmethod
     def compresser(chaine, codes):
         """
@@ -139,7 +117,7 @@ class NoeudHuffman(NoeudBinaire):
             resultat += codes[caractere]
         return resultat
 
-    # 5. Décompression
+    # Décompression
     @staticmethod
     def decompresser(binaire, racine):
         """
@@ -160,3 +138,69 @@ class NoeudHuffman(NoeudBinaire):
                 noeud = racine
 
         return resultat
+    
+    def __str__(self, prefix="", is_left=True, is_root=True):
+        res = ""
+        
+        # -------- Racine --------
+        if is_root:
+            res += repr(self.valeur) + "\n"
+            new_prefix = ""
+        else:
+            bit = "0" if is_left else "1"
+            connector = f"├──{bit}── " if is_left else f"└──{bit}── "
+            res += prefix + connector + repr(self.valeur) + "\n"
+            new_prefix = prefix + ("|     " if is_left else "      ")
+            
+        # -------- Sous-arbre gauche --------
+        if self.gauche is not None:
+            res += self.gauche.__str__(new_prefix, True, False)
+        elif self.droit is not None:
+            res += new_prefix + "├──0── .\n"
+            
+        # -------- Sous-arbre droit --------
+        if self.droit is not None:
+            res += self.droit.__str__(new_prefix, False, False)
+        elif self.gauche is not None:
+            res += new_prefix + "└──1── .\n"
+            
+        return res
+
+
+def get_printable_representation(self):
+    """
+    Construit une représentation de l'arbre sous forme de liste de lignes
+    pour un affichage sécurisé.
+    """
+    lines = []
+    
+    # Fonction récursive interne pour ne pas exposer les paramètres
+    def build_lines(noeud, prefix="", is_left=True, is_root=True):
+        if noeud is None:
+            return
+        
+        # Sécurisation de la valeur du noeud pour l'affichage
+        try:
+            valeur_str = repr(noeud.valeur)
+        except Exception:
+            valeur_str = "(Erreur d'encodage)"
+            
+        # Construction de la ligne actuelle
+        if is_root:
+            lines.append(valeur_str)
+            new_prefix = ""
+        else:
+            bit = "0" if is_left else "1"
+            connector = f"├──{bit}── " if is_left else f"└──{bit}── "
+            lines.append(prefix + connector + valeur_str)
+            new_prefix = prefix + ("|     " if is_left else "      ")
+            
+        # Appel récursif sur les enfants
+        if noeud.gauche or noeud.droit:
+            build_lines(noeud.gauche, new_prefix, True, False)
+            build_lines(noeud.droit, new_prefix, False, False)
+        # Gestion des points pour les enfants uniques (si nécessaire)
+        # Pour l'instant, on simplifie en n'affichant rien si l'enfant est None
+        
+    build_lines(self)
+    return lines
