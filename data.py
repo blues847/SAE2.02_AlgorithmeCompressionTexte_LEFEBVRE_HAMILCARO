@@ -67,14 +67,12 @@ class Data:
 
     @staticmethod
     def afficher_arbre_console(racine):
-        """Affiche l'arbre de Huffman de manière lisible."""
+        """Affiche l'arbre de Huffman de maniere lisible."""
         if racine is None:
             print("\nArbre de Huffman : (vide)")
             return
         print("\n--- Arbre de Huffman ---")
-        lignes = racine.get_representation_arbre()
-        for ligne in lignes:
-            print(ligne)
+        print(racine)
         print("-" * 24)
 
     @staticmethod

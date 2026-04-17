@@ -31,7 +31,7 @@ def main():
 
         if choix_principal == 'Q':
             print("Au revoir !")
-            return
+            break
         
         elif choix_principal == 'A':
             print("\n--- Traitement de tous les fichiers ---")
@@ -44,7 +44,7 @@ def main():
                         texte = f.read()
                     if not texte.strip():
                         print("Fichier vide.")
-                        return
+                        break
                     
                     texte_propre = Data.nettoyer_texte(texte)
                     texte_compresse, _, _ = Data.compresser_texte(texte_propre)
@@ -59,7 +59,7 @@ def main():
                 index_choisi = int(choix_principal) - 1
                 if not (0 <= index_choisi < len(fichiers_txt)):
                     print("Numero de fichier invalide.")
-                    return
+                    break
 
                 nom_fichier_choisi = fichiers_txt[index_choisi]
                 chemin_fichier = os.path.join(DOSSIER_INPUT, nom_fichier_choisi)
@@ -70,7 +70,7 @@ def main():
 
                 if not texte_original.strip():
                     print("Le fichier est vide.")
-                    return
+                    break
 
                 texte_propre = Data.nettoyer_texte(texte_original)
                 texte_compresse, racine, codes = Data.compresser_texte(texte_propre)

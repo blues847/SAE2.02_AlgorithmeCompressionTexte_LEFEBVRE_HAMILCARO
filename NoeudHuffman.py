@@ -3,10 +3,12 @@ from NoeudBinaire import NoeudBinaire
 class NoeudHuffman(NoeudBinaire):
     """Implemente un noeud pour un arbre de Huffman."""
 
+    # Constructeur
     def __init__(self, chaine=None, poids=None, gauche=None, droit=None):
         """Initialise un noeud de Huffman avec une chaine et un poids."""
         super().__init__((chaine, poids), gauche, droit)
 
+    # Getters
     def getChaine(self):
         """Retourne la chaine de caracteres du noeud."""
         return self.valeur[0]
@@ -15,6 +17,7 @@ class NoeudHuffman(NoeudBinaire):
         """Retourne le poids du noeud."""
         return self.valeur[1]
 
+    # Méthodes
     @staticmethod
     def compte_Occurrences(chaine):
         """Compte les occurrences de chaque caractere dans une chaine."""
