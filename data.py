@@ -1,3 +1,4 @@
+import csv
 import os
 from NoeudHuffman import NoeudHuffman
 
@@ -92,3 +93,53 @@ class Data:
         else:
             print("ERREUR : Le texte décompressé est différent du texte propre.")
         print("-" * 20)
+        
+    @staticmethod
+    def initialiser_csv(chemin_csv="resultats_compression.csv"):
+        """
+        Supprime l'ancien CSV et recrée le fichier avec l'en-tête.
+        À appeler UNE FOIS au démarrage du programme.
+        """
+        with open(chemin_csv, mode="w", newline="", encoding="utf-8") as fichier:
+            writer = csv.writer(fichier, delimiter=';')
+            writer.writerow([
+                "fichier",
+                "taille_avant_bits",
+                "taille_apres_bits",
+                "taux_compression_pourcent",
+                "nb_caracteres",
+                "nb_symboles",
+                "longueur_binaire"
+            ])
+
+    @staticmethod
+    def ajouter_csv(
+        nom_fichier,
+        texte_propre,
+        texte_compresse,
+        codes,
+        chemin_csv="resultats_compression.csv"
+    ):
+        """
+        Ajoute les statistiques d'un fichier compressé dans le CSV.
+        """
+
+        taille_avant = len(texte_propre.encode("utf-8")) * 8
+        taille_apres = len(texte_compresse)
+        taux = (1 - taille_apres / taille_avant) * 100 if taille_avant > 0 else 0
+
+        nb_caracteres = len(texte_propre)
+        nb_symboles = len(codes)
+        longueur_binaire = len(texte_compresse)
+
+        with open(chemin_csv, mode="a", newline="", encoding="utf-8") as fichier:
+            writer = csv.writer(fichier, delimiter=';')
+            writer.writerow([
+                nom_fichier,
+                taille_avant,
+                taille_apres,
+                round(taux, 2),
+                nb_caracteres,
+                nb_symboles,
+                longueur_binaire
+            ])
